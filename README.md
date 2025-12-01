@@ -53,3 +53,14 @@ Retorna a lista de seguradoras configuradas no projeto.
 Exemplo de requisição
 curl http://localhost:3000/seguradoras
 
+Exemplo de resposta
+
+[
+  "Porto Seguro",
+  "Bradesco Seguros",
+  "SulAmérica",
+  "Allianz",
+  "Tokio Marine"
+]
+
+
