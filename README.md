@@ -8,7 +8,7 @@ Ela foi pensada para ser consumida por ferramentas de automação como **n8n**,
 
 ---
 
-## ✨ Funcionalidades
+##  Funcionalidades
 
 - Exposição de uma lista padronizada de seguradoras usadas pela InterWeg.
 - Detecção de seguradora a partir de um texto (ex.: mensagem recebida no WhatsApp).
@@ -17,7 +17,7 @@ Ela foi pensada para ser consumida por ferramentas de automação como **n8n**,
 
 ---
 
-## 🛠 Tecnologias
+##  Tecnologias
 
 - Node.js
 - Express (ou HTTP nativo, dependendo da implementação em `index.js`)
