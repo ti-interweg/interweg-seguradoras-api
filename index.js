@@ -6,11 +6,34 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Rota que retorna todas as seguradoras
-app.get('/seguradoras', (req, res) => {
-  res.json({
-    total: Object.keys(seguradoras).length,
-    seguradoras
+// Rota que retorna uma seguradora pelo nome (querystring)
+app.get('/seguradora', (req, res) => {
+  const nomeParam = (req.query.nome || "").toLowerCase().trim();
+
+  let seguradoraNome = "";
+
+  for (const nome in seguradoras) {
+    const nomeNorm = nome.toLowerCase();
+    const base = nomeNorm.replace("seguros", "").trim();
+
+    if (nomeParam.includes(nomeNorm) || nomeParam.includes(base)) {
+      seguradoraNome = nome;
+      break;
+    }
+  }
+
+  if (!seguradoraNome) {
+    return res.status(404).json({ ok: 0, mensagem: "Seguradora não encontrada" });
+  }
+
+  const dados = seguradoras[seguradoraNome];
+
+  return res.json({
+    ok: 1,
+    nome: seguradoraNome,
+    assistencia: dados.assistencia,
+    sinistro: dados.sinistro,
+    vidros: dados.vidros || null,
   });
 });
 
@@ -44,7 +67,7 @@ app.post('/detect', (req, res) => {
     seguradora: seguradoraNome,
     assistencia: dados.assistencia,
     sinistro: dados.sinistro,
-    vidros: dados.vidros, // 👈 incluído aqui
+    vidros: dados.vidros, //  incluído aqui
     mensagemAssistencia:
       `Seguradora: ${seguradoraNome}\n` +
       `Assistência 24h:\n` +
