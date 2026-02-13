@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// 🔹 1) Rota que retorna todas as seguradoras
+// Rota que retorna todas as seguradoras
 app.get('/seguradoras', (req, res) => {
   res.json({
     total: Object.keys(seguradoras).length,
@@ -14,12 +14,12 @@ app.get('/seguradoras', (req, res) => {
   });
 });
 
-// 🔹 2) Rota que detecta seguradora baseado no texto do usuário
+// Rota que detecta seguradora baseado no texto do usuário
 app.post('/detect', (req, res) => {
   const texto = (req.body.text || "").toLowerCase().trim();
-  
+
   let seguradoraNome = "";
-  
+
   for (const nome in seguradoras) {
     const nomeNorm = nome.toLowerCase();
     const base = nomeNorm.replace("seguros", "").trim();
@@ -44,15 +44,19 @@ app.post('/detect', (req, res) => {
     seguradora: seguradoraNome,
     assistencia: dados.assistencia,
     sinistro: dados.sinistro,
-    mensagemAssistencia: 
+    vidros: dados.vidros, // 👈 incluído aqui
+    mensagemAssistencia:
       `Seguradora: ${seguradoraNome}\n` +
       `Assistência 24h:\n` +
       `• Capital: ${dados.assistencia.capital}\n` +
-      `• Interior: ${dados.assistencia.interior}`
+      `• Interior: ${dados.assistencia.interior}`,
+    mensagemVidros: dados.vidros
+      ? `Vidros:\n• Capital: ${dados.vidros.capital}\n• Interior: ${dados.vidros.interior}`
+      : "Esta seguradora não possui atendimento de vidros cadastrado."
   });
 });
 
-// porta do servidor
+// Porta do servidor
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`API InterWeg rodando na porta ${port}`);
