@@ -6,7 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Rota que retorna uma seguradora pelo nome (querystring)
+// ================================
+// Rota: busca seguradora por nome (?nome=...)
+// ================================
 app.get('/seguradora', (req, res) => {
   const nomeParam = (req.query.nome || "").toLowerCase().trim();
 
@@ -31,13 +33,15 @@ app.get('/seguradora', (req, res) => {
   return res.json({
     ok: 1,
     nome: seguradoraNome,
-    assistencia: dados.assistencia,
-    sinistro: dados.sinistro,
+    assistencia: dados.assistencia || null,
+    sinistro: dados.sinistro || null,
     vidros: dados.vidros || null,
   });
 });
 
-// Rota que detecta seguradora baseado no texto do usuário
+// ================================
+// Rota: detecta seguradora a partir de um texto
+// ================================
 app.post('/detect', (req, res) => {
   const texto = (req.body.text || "").toLowerCase().trim();
 
@@ -65,21 +69,25 @@ app.post('/detect', (req, res) => {
   return res.json({
     encontrada: true,
     seguradora: seguradoraNome,
-    assistencia: dados.assistencia,
-    sinistro: dados.sinistro,
-    vidros: dados.vidros, //  incluído aqui
+    assistencia: dados.assistencia || null,
+    sinistro: dados.sinistro || null,
+    vidros: dados.vidros || null,
+
     mensagemAssistencia:
       `Seguradora: ${seguradoraNome}\n` +
       `Assistência 24h:\n` +
-      `• Capital: ${dados.assistencia.capital}\n` +
-      `• Interior: ${dados.assistencia.interior}`,
-    mensagemVidros: dados.vidros
-      ? `Vidros:\n• Capital: ${dados.vidros.capital}\n• Interior: ${dados.vidros.interior}`
+      `• Capital: ${dados.assistencia?.capital || "-"}\n` +
+      `• Interior: ${dados.assistencia?.interior || "-"}`,
+
+    mensagemVidros: dados.vidros?.capital || dados.vidros?.interior
+      ? `Vidros:\n• Capital: ${dados.vidros?.capital || "-"}\n• Interior: ${dados.vidros?.interior || "-"}`
       : "Esta seguradora não possui atendimento de vidros cadastrado."
   });
 });
 
+// ================================
 // Porta do servidor
+// ================================
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`API InterWeg rodando na porta ${port}`);
