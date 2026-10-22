@@ -1,4 +1,4 @@
-# InterWeg Automations – API de Seguradoras
+# InterWeg Automations - API de Seguradoras
 
 API em Node.js usada pela InterWeg para centralizar a lista de seguradoras e
 detectar automaticamente o nome da seguradora a partir de um texto livre
